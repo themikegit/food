@@ -1,8 +1,21 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useSpring, animated } from "react-spring";
+import { AiOutlineClockCircle } from "react-icons/ai";
 import axios from "axios";
 
 export default function RecipePage(props) {
+	const fade = useSpring({
+		from: {
+			opacity: 0,
+			marginTop: 500,
+		},
+		to: {
+			opacity: 1,
+			marginTop: 0,
+		},
+	});
+
 	const [img, setimg] = useState();
 	const [recipe, setrecipe] = useState({ rec: "", isLoaded: false });
 	useEffect(() => {
@@ -16,38 +29,68 @@ export default function RecipePage(props) {
 	console.log("recipe from page", recipe);
 	if (recipe.isLoaded) {
 		return (
-			<Wraper>
-				<div
-					style={{
-						height: "30vh",
-						marginBottom: "25px",
-						backgroundImage: `url( ${recipe.rec.acf.image} )`,
-						backgroundPosition: "center",
-						backgroundSize: "cover",
-						backgroundRepeat: "no-repeat",
-					}}
-				></div>
-				<h1 style={{ textAlign: "center" }}> {recipe.rec.title.rendered} </h1>
-				<Main>
-					<Ingredients>
-						<p>{recipe.rec.acf.ingredients}</p>
-					</Ingredients>
-					<Recipe>
-						<p
-							dangerouslySetInnerHTML={{ __html: recipe.rec.content.rendered }}
-						/>
-					</Recipe>
-				</Main>
-			</Wraper>
+			<animated.div style={fade}>
+				<Wraper>
+					<Hero
+						style={{
+							backgroundImage: `url( ${recipe.rec.acf.image} )`,
+						}}
+					>
+						<Timer>
+							<AiOutlineClockCircle /> <p>{recipe.rec.acf.preparation_time}</p>{" "}
+						</Timer>
+					</Hero>
+					<h1 style={{ textAlign: "center" }}> {recipe.rec.title.rendered} </h1>
+					<Main>
+						<Ingredients>
+							<p>{recipe.rec.acf.ingredients}</p>
+						</Ingredients>
+						<Recipe>
+							<p
+								dangerouslySetInnerHTML={{
+									__html: recipe.rec.content.rendered,
+								}}
+							/>
+						</Recipe>
+					</Main>
+				</Wraper>
+			</animated.div>
 		);
 	}
-	return <h3>loading....</h3>;
+	return null;
 }
 
 const Wraper = styled.div`
 	max-width: 800px;
 	padding: 0 5%;
 	margin: 0 auto;
+`;
+
+const Hero = styled.div`
+	display: flex;
+	justify-content: flex-end;
+	height: 30vh;
+	margin-bottom: 25px;
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+`;
+
+const Timer = styled.div`
+	display: flex;
+	align-self: flex-end;
+	align-items: center;
+	width: fit-content;
+	background-color: #000;
+	color: #fff;
+	padding: 5px;
+	margin-bottom: -15px;
+	border-radius: 5px;
+	font-size: 2rem;
+	p {
+		margin-left: 5px;
+		font-size: 1.5rem;
+	}
 `;
 
 const Main = styled.div`

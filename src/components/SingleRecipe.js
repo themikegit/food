@@ -1,35 +1,48 @@
 import React, { useEffect, useState } from "react";
+import { useSpring, animated } from "react-spring";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import axios from "axios";
 
 export default function SingleRecipe(props) {
+	const fade = useSpring({
+		from: {
+			opacity: 0,
+			marginTop: 100,
+		},
+		to: {
+			opacity: 1,
+			marginTop: 0,
+		},
+	});
 	return (
-		<Link to={`/recipe/${props.pass.id}`}>
-			<Single>
-				<Hero style={{ backgroundImage: `url(${props.pass.acf.image})` }}>
-					{props.pass.acf.vege == "Yes" ? (
-						<Vege>
-							<p>Vege</p>{" "}
-						</Vege>
-					) : null}
+		<animated.div style={fade}>
+			<Link to={`/recipe/${props.pass.id}`}>
+				<Single>
+					<Hero style={{ backgroundImage: `url(${props.pass.acf.image})` }}>
+						{props.pass.acf.vege == "Yes" ? (
+							<Vege>
+								<p>Vege</p>{" "}
+							</Vege>
+						) : null}
 
-					<Timer>
-						<AiOutlineClockCircle />
-						<p> {props.pass.acf.preparation_time} </p>
-					</Timer>
-				</Hero>
-				<Inner>
-					<h2> {props.pass.title.rendered} </h2>
-					<p
-						dangerouslySetInnerHTML={{
-							__html: props.pass.acf.short_description,
-						}}
-					/>
-				</Inner>
-			</Single>
-		</Link>
+						<Timer>
+							<AiOutlineClockCircle />
+							<p> {props.pass.acf.preparation_time} </p>
+						</Timer>
+					</Hero>
+					<Inner>
+						<h2> {props.pass.title.rendered} </h2>
+						<p
+							dangerouslySetInnerHTML={{
+								__html: props.pass.acf.short_description,
+							}}
+						/>
+					</Inner>
+				</Single>
+			</Link>
+		</animated.div>
 	);
 }
 

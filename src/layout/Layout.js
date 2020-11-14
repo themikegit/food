@@ -4,9 +4,12 @@ import Footer from "./Footer";
 
 export default function Layout({ children }) {
 	return (
-		<div>
+		<div
+			style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+		>
 			<Header />
-			{children}
+			<div style={{ flexGrow: "1" }}>{children}</div>
+
 			<Footer />
 		</div>
 	);

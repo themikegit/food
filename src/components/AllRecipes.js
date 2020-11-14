@@ -8,7 +8,8 @@ export default function AllRecipes() {
 	const [wpRec, setwpRec] = useState({ allRec: "", isLoaded: false });
 	const [category, setcategory] = useState("");
 	const Filtering = (name) => {
-		setcategory(name);
+		name === category ? setcategory("") : setcategory(name);
+		console.log("name", name);
 	};
 
 	useEffect(() => {
@@ -33,7 +34,8 @@ export default function AllRecipes() {
 		console.log("catGen", catGen);
 		return (
 			<>
-				<Filter fun={Filtering} />
+				<Filter valstate={category} fun={Filtering} />
+
 				<Section>
 					{(category ? catGen : allRec).map((recipe) => (
 						<SingleRecipe pass={recipe} />
@@ -42,7 +44,7 @@ export default function AllRecipes() {
 			</>
 		);
 	}
-	return <h4>Loading....</h4>;
+	return null;
 }
 
 const Section = styled.div`
