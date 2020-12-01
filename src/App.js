@@ -1,18 +1,21 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import AllRecipes from "./components/AllRecipes";
 import RecipePage from "./components/RecipePage";
 import Layout from "./layout/Layout";
+import { ContextFun } from "./components/Context";
 
 function App() {
 	return (
 		<Router>
-			<div>
+			<ContextFun>
 				<Layout>
-					<Route exact path="/" component={AllRecipes} />
-					<Route exact path="/recipe/:id" component={RecipePage} />
+					<Switch>
+						<Route exact path="/" component={AllRecipes} />
+						<Route path="/recipe/:id" component={RecipePage} />
+					</Switch>
 				</Layout>
-			</div>
+			</ContextFun>
 		</Router>
 	);
 }

@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useSpring, animated } from "react-spring";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { AiOutlineClockCircle } from "react-icons/ai";
-import axios from "axios";
 
 export default function SingleRecipe(props) {
 	const fade = useSpring({
@@ -21,7 +20,7 @@ export default function SingleRecipe(props) {
 			<Link to={`/recipe/${props.pass.id}`}>
 				<Single>
 					<Hero style={{ backgroundImage: `url(${props.pass.acf.image})` }}>
-						{props.pass.acf.vege == "Yes" ? (
+						{props.pass.acf.vege === "Yes" ? (
 							<Vege>
 								<p>Vege</p>{" "}
 							</Vege>

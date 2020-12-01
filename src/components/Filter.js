@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { MyContext } from "./Context";
 
-export default function Filter({ fun, valstate }) {
+export default function Filter() {
+	const { category, Filtering } = useContext(MyContext);
+
 	const active = {
 		backgroundColor: " #000",
 		color: "#fff",
@@ -13,9 +15,9 @@ export default function Filter({ fun, valstate }) {
 		<FilterSection>
 			<ul>
 				<li
-					onClick={(e) => fun(e.currentTarget.dataset.id)}
+					onClick={(e) => Filtering(e.currentTarget.dataset.id)}
 					data-id="Glavno jelo"
-					style={valstate == "Glavno jelo" ? active : null}
+					style={category === "Glavno jelo" ? active : null}
 				>
 					<span role="img" aria-label="Glavno jelo">
 						🍗
@@ -24,8 +26,8 @@ export default function Filter({ fun, valstate }) {
 				</li>
 
 				<li
-					onClick={(e) => fun(e.currentTarget.dataset.id)}
-					style={valstate == "Užina" ? active : null}
+					onClick={(e) => Filtering(e.currentTarget.dataset.id)}
+					style={category === "Užina" ? active : null}
 					data-id="Užina"
 				>
 					<span role="img" aria-label="Užina">
@@ -34,8 +36,8 @@ export default function Filter({ fun, valstate }) {
 					<h3>Uzina</h3>{" "}
 				</li>
 				<li
-					onClick={(e) => fun(e.currentTarget.dataset.id)}
-					style={valstate == "Dezert" ? active : null}
+					onClick={(e) => Filtering(e.currentTarget.dataset.id)}
+					style={category === "Dezert" ? active : null}
 					data-id="Dezert"
 				>
 					<span role="img" aria-label="Dezert">
@@ -59,7 +61,7 @@ const FilterSection = styled.div`
       cursor: pointer;
       text-align: center;
       width: 100px;
-      margin: 5px 15px;
+      margin: 5px;
       border: 1px solid #ececec;
       border-radius: 7px;
 			padding: 8px;

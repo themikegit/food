@@ -1,10 +1,21 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
+import MoreRec from "./MoreRec";
 import { useSpring, animated } from "react-spring";
 import { AiOutlineClockCircle } from "react-icons/ai";
+import { IoMdArrowRoundBack } from "react-icons/io";
 import axios from "axios";
 
-export default function RecipePage(props) {
+const RecipePage = (props) => {
+	const [recept, setrecept] = useState({ rec: "", isLoaded: false });
+
+	const {
+		match: { params },
+	} = props;
+
+	console.log("me renders!");
+
 	const fade = useSpring({
 		from: {
 			opacity: 0,
@@ -16,49 +27,64 @@ export default function RecipePage(props) {
 		},
 	});
 
-	const [img, setimg] = useState();
-	const [recipe, setrecipe] = useState({ rec: "", isLoaded: false });
 	useEffect(() => {
 		axios
 			.get(
 				`http://progress.rostovniki.com/wp-json/wp/v2/recipe/${props.match.params.id}`
 			)
-			.then((res) => setrecipe({ rec: res.data, isLoaded: true }))
+			.then((res) => setrecept({ rec: res.data, isLoaded: true }))
 			.catch((err) => console.log("err", err));
-	}, []);
-	console.log("recipe from page", recipe);
-	if (recipe.isLoaded) {
+	}, [params]);
+
+	if (recept.isLoaded) {
 		return (
 			<animated.div style={fade}>
 				<Wraper>
 					<Hero
 						style={{
-							backgroundImage: `url( ${recipe.rec.acf.image} )`,
+							backgroundImage: `url( ${recept.rec.acf.image} )`,
 						}}
 					>
 						<Timer>
-							<AiOutlineClockCircle /> <p>{recipe.rec.acf.preparation_time}</p>{" "}
+							<AiOutlineClockCircle /> <p>{recept.rec.acf.preparation_time}</p>{" "}
 						</Timer>
 					</Hero>
-					<h1 style={{ textAlign: "center" }}> {recipe.rec.title.rendered} </h1>
+					<Nav>
+						<Link to={"/"}>
+							<div style={{ display: "flex", alignItems: "center" }}>
+								<IoMdArrowRoundBack /> <p>Nazad</p>{" "}
+							</div>
+						</Link>
+						<h1 style={{ textAlign: "center" }}>
+							{" "}
+							{recept.rec.title.rendered}{" "}
+						</h1>
+						<div></div>
+					</Nav>
+
 					<Main>
 						<Ingredients>
-							<p>{recipe.rec.acf.ingredients}</p>
+							<p>{recept.rec.acf.ingredients}</p>
 						</Ingredients>
 						<Recipe>
 							<p
 								dangerouslySetInnerHTML={{
-									__html: recipe.rec.content.rendered,
+									__html: recept.rec.content.rendered,
 								}}
 							/>
 						</Recipe>
 					</Main>
+					<MoreRec
+						currentData={{ id: recept.rec.id, kat: recept.rec.acf.kategorija }}
+					/>
 				</Wraper>
 			</animated.div>
 		);
 	}
 	return null;
-}
+};
+
+export default RecipePage;
 
 const Wraper = styled.div`
 	max-width: 800px;
@@ -76,6 +102,12 @@ const Hero = styled.div`
 	background-repeat: no-repeat;
 `;
 
+const Nav = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+`;
+
 const Timer = styled.div`
 	display: flex;
 	align-self: flex-end;
@@ -86,10 +118,10 @@ const Timer = styled.div`
 	padding: 5px;
 	margin-bottom: -15px;
 	border-radius: 5px;
-	font-size: 2rem;
+	font-size: 1.3rem;
 	p {
 		margin-left: 5px;
-		font-size: 1.5rem;
+		font-size: 1.2rem;
 	}
 `;
 
